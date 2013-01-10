@@ -1,5 +1,3 @@
-#### *We will soon have this presentation in English*
-
 ## O que é o JSONtoCanvasChartProject
 O JSONtoCanvasChartProject é uma ferramenta experimental que implementa um método sem complicações de converter dados JSON para gráficos construídos em cima do HTML5 canvas utilizando apenas alguns padrões web.
 
