@@ -13,6 +13,7 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
         tamanhoMargem,
         propriedadesGrafico = {'backgroundColor': '#FFF',
                                'borderColor': '#000'},
+        legendaDados = [],
         larguraGrid,
         alturaGrid,
         propriedadesGrid = {'backgroundColor': '#FFF',
@@ -122,6 +123,7 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
             iteradorFor = iteradorFor + 1;
             desenhaRect(corBarra, distanciaXbarra, distanciaYbarra, 
                         larguraBarra, alturaBarra);
+            legendaDados.push([corBarra, dataCollection[i].rotulo])
             context.fillStyle = '#000';
             context.textAlign = 'center';
             context.fillText(dataCollection[i].valor, distanciaXvalorBarra, distanciaYvalorBarra);
