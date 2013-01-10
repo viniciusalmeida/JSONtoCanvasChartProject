@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<header>
+<meta charset="utf-8">
+<title>CanvasLib</title>
+<script type="text/javascript" src="../JSONtoCanvasChartProject.js"></script>
+<script type="text/javascript" src="js/definicaoJSON.js"></script>
+<style type="text/css">
+div {float: left; margin: 10px;}
+</style>
+</header>
+<body>
+
+	<h1>JSONtoCanvasChartProject</h1>
+
+	<h2>Gráfico básico</h2>
+
+	<div id="myBasicBigChart"></div>
+
+	<div id="myBasicChart"></div>
+
+	<script type="text/javascript">
+
+		var ChartTool = new JSONtoCanvasChart(300, 200);
+		ChartTool.setPropriedadesGrid({'backgroundColor': '#EFEFEF'});
+		ChartTool.setDataCollection(bilheteria);
+		ChartTool.show('myBasicChart');
+
+		var BigChartTool = new JSONtoCanvasChart(500, 300);
+		BigChartTool.setPropriedadesGrid({'backgroundColor': '#EFEFEF'});
+		BigChartTool.setDataCollection(bilheteria);
+		BigChartTool.show('myBasicBigChart');
+
+	</script>
+
+</body>
+</html>
