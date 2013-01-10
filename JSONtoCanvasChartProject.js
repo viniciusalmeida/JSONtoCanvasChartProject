@@ -3,6 +3,7 @@ com o elemento canvas do HTML5 */
 
 var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
 
+
     /* Definição das propriedades e dos seus valores iniciais */
     var canvas,
         context,
@@ -16,8 +17,9 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
         alturaGrid,
         propriedadesGrid = {'backgroundColor': '#FFF',
                             'borderColor': '#CCC',
-                            'tipoGrafico': 'barras',
+                            'tipoGrafico': 'barrasSimples',
                             'cores': ['red', 'green', 'blue', 'yellow']};
+
 
     function load() {
         /* Método pseudo-construtor
@@ -31,8 +33,10 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
                     larguraGrafico, alturaGrafico, propriedadesGrafico.borderColor);
     }
 
+
     /* Chamada ao pseudo-construtor */
     load();
+
 
     function desenhaRect (corPreenchimento, posicaoX, posicaoY, 
                           largura, altura, corContorno) {
@@ -46,6 +50,7 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
             context.strokeRect(posicaoX, posicaoY, largura, altura)
         }
     }
+
 
     function setGrid() {
         /* Método que define as proporções da margem interna entre a borda do gráfico e
@@ -62,18 +67,17 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
                     larguraGrid, alturaGrid, propriedadesGrid.borderColor);
     }
 
-    function invocaGrafico() {
-        /* Método que valida qual o tipo de gráfico que está setado e invoca
-        o método responsável pela renderização do mesmo */
-        switch (propriedadesGrid.tipoGrafico) {
 
-            case 'barras':
-                /*  */
-                // @TODO analizar a dataCollection pra ver se está no padrão do tipo de gráfico
+    function invocaGrafico() {
+        /* Método que valida qual o tipo de gráfico que está setado nas propriedades e 
+        invoca o método responsável pela renderização do mesmo. */
+        switch (propriedadesGrid.tipoGrafico) {
+            case 'barrasSimples':
                 desenhaBarrasSimples();
                 break;
         }
     }
+
 
     function desenhaBarrasSimples () {
         /* Método responsável pelo desenho do gráfico de barras simples
@@ -109,8 +113,12 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
             distanciaYbarra = (tamanhoMargem - 1) + (alturaGrid - alturaBarra);
             distanciaXvalorBarra = distanciaXbarra + (larguraBarra / 2);
             distanciaYvalorBarra = distanciaYbarra + 15;
-            corBarra = propriedadesGrid.cores.shift();
-            propriedadesGrid.cores.push(corBarra);
+            if (dataCollection[i].colorBar === undefined) {    
+                corBarra = propriedadesGrid.cores.shift();
+                propriedadesGrid.cores.push(corBarra);
+            } else {
+                corBarra = dataCollection[i].colorBar;
+            }
             iteradorFor = iteradorFor + 1;
             desenhaRect(corBarra, distanciaXbarra, distanciaYbarra, 
                         larguraBarra, alturaBarra);
@@ -119,6 +127,7 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
             context.fillText(dataCollection[i].valor, distanciaXvalorBarra, distanciaYvalorBarra);
         }
     }
+
 
     return {
 
@@ -130,18 +139,19 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
             invocaGrafico();
         },
 
+
         setDataCollection: function (collection) {
             /* Método setter da collection de dados que serão usados nos gráficos.
             Ao ser invocado já converte a notação JSON. */
             dataCollection = JSON.parse(collection);
         },
 
+
         setPropriedadesGrid: function (newPropertiesObject) {
             /* Método setter das propriedades básicas.
             Ele trabalha de uma forma bem inteligente validando a existência das propriedades */
             var property,
                 existingProperty;
-
             for (property in newPropertiesObject) {
                 existingProperty = propriedadesGrid.hasOwnProperty(property);
                 if (existingProperty) {propriedadesGrid[property] = newPropertiesObject[property]; }

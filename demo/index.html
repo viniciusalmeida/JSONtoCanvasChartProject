@@ -33,5 +33,16 @@ div {float: left; margin: 10px;}
 
 	</script>
 
+	<div id="myBigComparativeChart"></div>
+
+	<script type="text/javascript">
+
+		var BigComparativeChart = new JSONtoCanvasChart(400, 200);
+		BigComparativeChart.setPropriedadesGrid({'tipoGrafico': 'barrasComparacao'});
+		BigComparativeChart.setDataCollection(bilheteria);
+		BigComparativeChart.show('myBigComparativeChart');
+
+	</script>
+
 </body>
 </html>
