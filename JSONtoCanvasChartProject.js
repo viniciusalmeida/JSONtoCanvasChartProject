@@ -53,13 +53,6 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
     }
 
 
-    function desenhaLinha(cor, valores) {
-        /* Método que abstrai o traço de linhas no gráfico.
-        Em cada nó da linha ele adiciona um marcador facilitando a visualização da curva. */
-        return;
-    }
-
-
     function setGrid() {
         /* Método que define as proporções da margem interna entre a borda do gráfico e
         e o grid. */
@@ -82,9 +75,6 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
         switch (propriedadesGrid.tipoGrafico) {
             case 'barrasSimples':
                 desenhaBarrasSimples();
-                break;
-            case 'linhasSimples':
-                desenhaLinhasSimples();
                 break;
         }
     }
@@ -141,49 +131,6 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
     }
 
 
-    function desenhaLinhasSimples() {
-        /* Método responsável pelo desenho do gráfico de barras simples
-        sem valores negativos (por enquento).
-        Basicamente percorre os dados a serem incluídos no gráfico e efetua os cálculos 
-        nescessários para desenhar o gráfico nas proporções adequadas.
-        OBS: No = Nó */
-        var maiorValorDaCollection = 0,
-            numeroValores = dataCollection[0].valores.length,
-            distanciaHorizontalNos = (larguraGrid / (numeroValores - 1)),
-            iteradorValores,
-            alturaNo,
-            corLinha;
-        /* Percorre o dataCollection tentando identificar o maior valor. Esse valor
-        é utilizado como referência para o desenho do gráfico */
-        for (var i = 0; i < dataCollection.length; i++) {
-            for (iteradorValores in dataCollection[i].valores) {
-                if (dataCollection[i].valores[iteradorValores] > maiorValorDaCollection) {
-                    maiorValorDaCollection = dataCollection[i].valores[iteradorValores];
-                }
-            }
-        }
-        /* Percorre os dados da collection para desenhar efetivamente o gráfico. */
-        for (var i = 0; i < dataCollection.length; i++) {
-            corLinha = propriedadesGrid.cores.shift();
-            propriedadesGrid.cores.push(corLinha);
-            context.lineWidth = 2;
-            context.strokeStyle = corLinha;
-            context.beginPath();
-            for (iteradorValores in dataCollection[i].valores) {
-                alturaNo = Math.round((dataCollection[i].valores[iteradorValores] / maiorValorDaCollection) * alturaGrid);
-                distanciaXNo = (iteradorValores * distanciaHorizontalNos) + tamanhoMargem;
-                distanciaYNo = (alturaGrid - alturaNo) + tamanhoMargem;
-                if (iteradorValores == 0) {
-                    context.moveTo(distanciaXNo, distanciaYNo);
-                } else {
-                    context.lineTo(distanciaXNo, distanciaYNo);
-                }
-            }
-            context.stroke();
-        }
-    }
-
-
     return {
 
         show: function (idContainer) {
@@ -209,9 +156,7 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
                 existingProperty;
             for (property in newPropertiesObject) {
                 existingProperty = propriedadesGrid.hasOwnProperty(property);
-                if (existingProperty) {
-                    propriedadesGrid[property] = newPropertiesObject[property]; 
-                }
+                if (existingProperty) {propriedadesGrid[property] = newPropertiesObject[property]; }
             }
         }
 

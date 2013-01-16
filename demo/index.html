@@ -5,45 +5,42 @@
 <title>CanvasLib</title>
 <script type="text/javascript" src="../JSONtoCanvasChartProject.js"></script>
 <script type="text/javascript" src="js/definicaoJSON.js"></script>
+<style type="text/css">
+div {float: left; margin: 10px;}
+</style>
 </header>
 <body>
 
 	<h1>JSONtoCanvasChartProject</h1>
 
-	<div>
+	<h2>Gráfico básico</h2>
 
-		<h2>Gráfico básico de barras</h2>
+	<div id="myBasicBigChart"></div>
 
-		<div id="myBasicChart"></div>
-
-	</div>
-
-	<div>
-
-		<h2>Gráfico básico de linhas</h2>
-
-		<div id="myBasicChartLines"></div>
-
-	</div>
+	<div id="myBasicChart"></div>
 
 	<script type="text/javascript">
 
-		console.time('gráfico de barras');
-		// criando e interagindo o gráfico simples de barras (que o padrão do componente).
-		var ChartTool = new JSONtoCanvasChart(700, 400);
+		var ChartTool = new JSONtoCanvasChart(300, 200);
 		ChartTool.setPropriedadesGrid({'backgroundColor': '#EFEFEF'});
 		ChartTool.setDataCollection(bilheteria);
 		ChartTool.show('myBasicChart');
-		console.timeEnd('gráfico de barras');
 
-		// criando e interagindo o gráfico simples de linhas.
-		console.time('gráfico de linhas');
-		var ChartLineTool = new JSONtoCanvasChart(700, 400);
-		ChartLineTool.setPropriedadesGrid({'backgroundColor': '#EFEFEF',
-	                                       'tipoGrafico': 'linhasSimples'});
-		ChartLineTool.setDataCollection(producao);
-		ChartLineTool.show('myBasicChartLines');
-		console.timeEnd('gráfico de linhas')
+		var BigChartTool = new JSONtoCanvasChart(500, 300);
+		BigChartTool.setPropriedadesGrid({'backgroundColor': '#EFEFEF'});
+		BigChartTool.setDataCollection(bilheteria);
+		BigChartTool.show('myBasicBigChart');
+
+	</script>
+
+	<div id="myBigComparativeChart"></div>
+
+	<script type="text/javascript">
+
+		var BigComparativeChart = new JSONtoCanvasChart(400, 200);
+		BigComparativeChart.setPropriedadesGrid({'tipoGrafico': 'barrasComparacao'});
+		BigComparativeChart.setDataCollection(bilheteria);
+		BigComparativeChart.show('myBigComparativeChart');
 
 	</script>
 
