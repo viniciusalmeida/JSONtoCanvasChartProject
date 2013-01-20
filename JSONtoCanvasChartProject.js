@@ -5,8 +5,8 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
 
 
     /* Definição das propriedades e dos seus valores iniciais */
-    var canvas,
-        context,
+    var canvas = document.createElement('canvas'),
+        context = canvas.getContext('2d'),
         dataCollection,
         larguraGrafico = larguraCanvas,
         alturaGrafico = alturaCanvas,
@@ -26,10 +26,8 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
         /* Método pseudo-construtor
         Define o tamanho do gráfico/canvas e o contexto do canvas.
         Aqui já começamos a desenhar nosso gráfico.*/
-        canvas = document.createElement('canvas');
         canvas.setAttribute('width', larguraGrafico);
         canvas.setAttribute('height', alturaGrafico);
-        context = canvas.getContext('2d');
         desenhaRect(propriedadesGrafico.backgroundColor, 0, 0, 
                     larguraGrafico, alturaGrafico, propriedadesGrafico.borderColor);
     }
@@ -53,16 +51,9 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
     }
 
 
-    function desenhaLinha(cor, valores) {
-        /* Método que abstrai o traço de linhas no gráfico.
-        Em cada nó da linha ele adiciona um marcador facilitando a visualização da curva. */
-        return;
-    }
-
-
     function setGrid() {
         /* Método que define as proporções da margem interna entre a borda do gráfico e
-        e o grid. */
+        e o grid. Por padrão, é utilizado um décimo da menor medida entre altura e largura */
         if (larguraGrafico < alturaGrafico) {
             tamanhoMargem = Math.round(larguraGrafico - (larguraGrafico * 0.9));
         } else {
@@ -100,37 +91,31 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
         - O iterador utilizado no for que faz o desenho do gráfico em sí inicia
         em 0.25 pois é um valor inicial que, nos calculos de posicionamento dos
         elementos, posiciona a primeira barra na distância exata da margem esquerda. */
-        var numeroRotulos = dataCollection.length,
-            larguraBarra = Math.round((larguraGrid / numeroRotulos) / 2),
-            alturaBarra,
-            distanciaXbarra,
-            distanciaYbarra,
-            distanciaXvalorBarra,
-            distanciaYvalorBarra,
+        var numeroBarras = dataCollection.length,
+            larguraBarra = Math.round((larguraGrid / numeroBarras) / 2),
             maiorValorDaCollection = 0,
-            iteradorFor = 0.25,
-            corBarra;
+            proporcaoDistanciaHorizontal = 0.25;
         /* Percorre os valores da collection de dados buscando o maior para utilizar
         como referência do tamanho das barras do gráfico. */
-        for (var i = 0; i < dataCollection.length; i++) {
+        for (var i = 0; i < numeroBarras; i++) {
             if (dataCollection[i].valor > maiorValorDaCollection) {
                 maiorValorDaCollection = dataCollection[i].valor;
             }
         }
         /* Percorre os dados da collection para desenhar efetivamente o gráfico. */        
-        for (var i = 0; i < dataCollection.length; i++) {
-            alturaBarra = ((dataCollection[i].valor / maiorValorDaCollection) * alturaGrid) - 2;
-            distanciaXbarra = tamanhoMargem + (larguraBarra * iteradorFor) * 2;
-            distanciaYbarra = (tamanhoMargem - 1) + (alturaGrid - alturaBarra);
-            distanciaXvalorBarra = distanciaXbarra + (larguraBarra / 2);
-            distanciaYvalorBarra = distanciaYbarra + 15;
+        for (var i = 0; i < numeroBarras; i++) {
+            var alturaBarra = ((dataCollection[i].valor / maiorValorDaCollection) * alturaGrid) - 2;
+            var distanciaXbarra = tamanhoMargem + (larguraBarra * proporcaoDistanciaHorizontal) * 2;
+            var distanciaYbarra = (tamanhoMargem - 1) + (alturaGrid - alturaBarra);
+            var distanciaXvalorBarra = distanciaXbarra + (larguraBarra / 2);
+            var distanciaYvalorBarra = distanciaYbarra + 15;
             if (dataCollection[i].colorBar === undefined) {    
-                corBarra = propriedadesGrid.cores.shift();
+                var corBarra = propriedadesGrid.cores.shift();
                 propriedadesGrid.cores.push(corBarra);
             } else {
-                corBarra = dataCollection[i].colorBar;
+                var corBarra = dataCollection[i].colorBar;
             }
-            iteradorFor = iteradorFor + 1;
+            proporcaoDistanciaHorizontal = proporcaoDistanciaHorizontal + 1;
             desenhaRect(corBarra, distanciaXbarra, distanciaYbarra, 
                         larguraBarra, alturaBarra);
             legendaDados.push([corBarra, dataCollection[i].rotulo])
@@ -150,9 +135,7 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
         var maiorValorDaCollection = 0,
             numeroValores = dataCollection[0].valores.length,
             distanciaHorizontalNos = (larguraGrid / (numeroValores - 1)),
-            iteradorValores,
-            alturaNo,
-            corLinha;
+            iteradorValores;
         /* Percorre o dataCollection tentando identificar o maior valor. Esse valor
         é utilizado como referência para o desenho do gráfico */
         for (var i = 0; i < dataCollection.length; i++) {
@@ -164,13 +147,13 @@ var JSONtoCanvasChart = function (larguraCanvas, alturaCanvas) {
         }
         /* Percorre os dados da collection para desenhar efetivamente o gráfico. */
         for (var i = 0; i < dataCollection.length; i++) {
-            corLinha = propriedadesGrid.cores.shift();
+            var corLinha = propriedadesGrid.cores.shift();
             propriedadesGrid.cores.push(corLinha);
-            context.lineWidth = 2;
+            context.lineWidth = 4;
             context.strokeStyle = corLinha;
             context.beginPath();
             for (iteradorValores in dataCollection[i].valores) {
-                alturaNo = Math.round((dataCollection[i].valores[iteradorValores] / maiorValorDaCollection) * alturaGrid);
+                var alturaNo = Math.round((dataCollection[i].valores[iteradorValores] / maiorValorDaCollection) * alturaGrid);
                 distanciaXNo = (iteradorValores * distanciaHorizontalNos) + tamanhoMargem;
                 distanciaYNo = (alturaGrid - alturaNo) + tamanhoMargem;
                 if (iteradorValores == 0) {
